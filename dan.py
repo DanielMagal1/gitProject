@@ -9,7 +9,7 @@ import datetime
 from colorama import Fore
 
 
-class GitRepository(object):
+class GitRepository:
     """A git repository"""
 
     def __init__(self, path, force=False):
@@ -29,7 +29,7 @@ class GitRepository(object):
         self.trackingArea = {}
         self.index = {}
         self.commitHead = None
-        self.RemoteRepo = "/Users/ashishchauhan/Downloads/Remote"
+        self.RemoteRepo = "/Users/daniel/Downloads/Remote"
 
     # writing from data structures into the files in .git folder
 
@@ -87,18 +87,18 @@ class GitRepository(object):
         toc_json = open('./.git/treeOfCommits.json', 'r')
         self.treeOfCommits = json.load(toc_json)
 
-    def raedFromJson_index(self):
+    def readFromJson_index(self):
         index_json = open('./.git/index.json', 'r')
         self.index = json.load(index_json)
 
     # utility functions
 
     def shaOf(self, filename):
-        sha256_hash = hashlib.sha256()
+        sha1_hash = hashlib.new('sha1')
         with open(filename, "rb") as f:
             for byte_block in iter(lambda: f.read(4096), b""):
-                sha256_hash.update(byte_block)
-        return sha256_hash.hexdigest()
+                sha1_hash.update(byte_block)
+        return sha1_hash.hexdigest()
 
     def delFilesOfWorkingDirectory(self, path):
         relative = pathlib.Path(os.path.relpath(path))
@@ -145,9 +145,9 @@ class GitRepository(object):
     def addDir(self, path):
         for p in pathlib.Path(path).iterdir():
             if p.is_file() and p not in self.trackingArea:
-                self.trackingArea[p] = self.shaOf(p)
+                self.trackingArea[self.shaOf(p)] = p.read_text()
                 self.trackedFiles.add(p)
-            elif ((p.is_dir()) & (not p.match("*/.git"))):
+            elif p.is_dir() and not p.match("*/.git"):
                 self.addDir(p)
 
     def gitAdd(self, p):
