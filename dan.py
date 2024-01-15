@@ -203,17 +203,17 @@ class GitRepository:
                 item = str(item).strip()
                 if item == "":
                     continue
-                print(str(counter+1) + " -> " +
+                print(str(counter + 1) + " -> " +
                       Fore.GREEN + str(item) + Fore.WHITE, "\n")
-                counter = counter+1
+                counter = counter + 1
 
         if len(untrackedFiles) != 0:
             print("\nUntracked Files: ")
             counter = 0
             for item in untrackedFiles:
-                print(str(counter+1) + " -> " +
+                print(str(counter + 1) + " -> " +
                       Fore.RED + str(item) + Fore.WHITE + "\n")
-                counter = counter+1
+                counter = counter + 1
 
         for i in self.trackingArea:
             if self.trackingArea[i] != self.shaOf(i):
@@ -223,9 +223,9 @@ class GitRepository:
             print("\nModified Files: ")
             counter = 0
             for item in self.modifiedFiles:
-                print(str(counter+1) + " -> " +
+                print(str(counter + 1) + " -> " +
                       Fore.YELLOW + str(item) + Fore.WHITE)
-                counter = counter+1
+                counter = counter + 1
 
     # git_COMMIT
 
@@ -253,12 +253,14 @@ class GitRepository:
 
         for fileName in self.trackingArea:
             self.index[curr_commit_id][fileName] = self.shaOf(fileName)
-            if (self.trackingArea[fileName] is None) or (self.index.get(self.treeOfCommits.get(curr_commit_id, {}), {}).get('fileName') != self.index[curr_commit_id][fileName]):
+            if (self.trackingArea[fileName] is None) or (
+                    self.index.get(self.treeOfCommits.get(curr_commit_id, {}), {}).get('fileName') !=
+                    self.index[curr_commit_id][fileName]):
                 # need to ponder
                 self.trackingArea[fileName] = self.index[curr_commit_id][fileName]
                 extension = self.getExtension(fileName)
                 dest = self.gitRepoPath + "/" + \
-                    self.index[curr_commit_id][fileName] + extension
+                       self.index[curr_commit_id][fileName] + extension
                 shutil.copy(fileName, dest)
 
         self.commitHead = curr_commit_id
@@ -279,8 +281,39 @@ class GitRepository:
         self.modifiedFiles.clear()
 
     # git_DIFF
+    @staticmethod
+    def diff(f1, f2):
+        file_1 = open(f1, 'r')
+        file_2 = open(f2, 'r')
+        a = file_1.readlines()
+        b = file_2.readlines()
+        len1 = len(a)  # the length of file 1
+        len2 = len(b)  # the length of file 2
+        dp = [[0 for i in range(len1 + 1)] for j in range(len2 + 1)]
+        # when len1 = 0 (meaning all lines had been deleted)
+        if len1 == 0:
+            for j in range(len1 + 1):
+                dp[0][j] = j
+        # when len2 = 0 (meaning all lines had been deleted)
+        if len2 == 0:
+        for i in range(len2 + 1):
+            dp[i][0] = i
+        # taking into account the different scenarios(deletion, adding, changing etc.)
+        for i in range(1, len1 + 1):
+            for j in range(1, len2 + 1):
+                if a[i-1] == b[j-1]:
+                    dp[i][j] = dp[i-1][j-1]
+                else:
+                    dp[i][j] = 1 + min(
+                        dp[i - 1][j],  # Insertion
+                        dp[i][j - 1],  # Deletion
+                        dp[i - 1][j - 1]  # Replacement
+                    )
 
-    def printDifference(self, x1, x2):
+        return dp[len1][len2]
+
+    @staticmethod
+    def printDifference(x1, x2):
         # Open File in Read Mode
         file_1 = open(x1, 'r')
         file_2 = open(x2, 'r')
@@ -306,7 +339,7 @@ class GitRepository:
                     print("@", "Line-%d" % line_no, file_1_line)
                 else:
                     print(Fore.RED, "@-", " Line-%d " %
-                          line_no, Fore.WHITE,  file_1_line, sep="")
+                          line_no, Fore.WHITE, file_1_line, sep="")
 
                 # otherwise output the line on file2 and use # sign
                 if file_2_line == '':
@@ -326,3 +359,11 @@ class GitRepository:
 
         file_1.close()
         file_2.close()
+
+
+def main():
+    num_diff = GitRepository.diff("text.txt", "text2.txt")
+    print(num_diff)
+
+if __name__ == "__main__":
+    main()
