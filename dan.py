@@ -111,7 +111,7 @@ class GitRepository:
 
     # git_INIT
 
-    def ExecInit(self, cmd):
+    def execInit(self, cmd):
         if os.path.exists(self.gitdir):
             print("\n<<-- Git Directory has been ALREADY initialised -->>\n")
             sys.exit(0)
@@ -203,8 +203,7 @@ class GitRepository:
                 item = str(item).strip()
                 if item == "":
                     continue
-                print(str(counter + 1) + " -> " +
-                      Fore.GREEN + str(item) + Fore.WHITE, "\n")
+                print(f"{counter + 1} -> {Fore.GREEN}{item}{Fore.WHITE}")
                 counter = counter + 1
 
         if len(untrackedFiles) != 0:
@@ -241,7 +240,7 @@ class GitRepository:
         extension = str(fileName)[pos:]
         return extension
 
-    def ExecCommit(self, msg):
+    def execCommit(self, msg):
         if len(self.index) == 0:
             self.commitHead = None
 
@@ -296,8 +295,8 @@ class GitRepository:
                 dp[0][j] = j
         # when len2 = 0 (meaning all lines had been deleted)
         if len2 == 0:
-        for i in range(len2 + 1):
-            dp[i][0] = i
+            for i in range(len2 + 1):
+                dp[i][0] = i
         # taking into account the different scenarios(deletion, adding, changing etc.)
         for i in range(1, len1 + 1):
             for j in range(1, len2 + 1):
@@ -336,10 +335,11 @@ class GitRepository:
 
                 # otherwise output the line on file1 and use @ sign
                 if file_1_line == '':
-                    print("@", "Line-%d" % line_no, file_1_line)
+                    print("@", f"Line-{line_no}", file_1_line)
                 else:
                     print(Fore.RED, "@-", " Line-%d " %
                           line_no, Fore.WHITE, file_1_line, sep="")
+                    print(f"{Fore.RED}@- Line-{line_no}", Fore.WHITE, file_1_line)
 
                 # otherwise output the line on file2 and use # sign
                 if file_2_line == '':
