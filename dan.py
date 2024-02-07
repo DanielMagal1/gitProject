@@ -282,12 +282,33 @@ class GitRepository:
     # git_DIFF
     @staticmethod
     def diff(f1, f2):
-        file_1 = open(f1, 'r')
-        file_2 = open(f2, 'r')
-        a = file_1.readlines()
-        b = file_2.readlines()
+        print(f1)
+        with open(f1, 'r') as f:  # closing the file after opening
+            a = f.readlines()
+        with open(f2, 'r') as f:  # closing the file after opening
+            b = f.readlines()
+
         len1 = len(a)  # the length of file 1
         len2 = len(b)  # the length of file 2
+
+        a.extend('' for _ in range(max(len2 - len1, 0)))
+        b.extend('' for _ in range(max(len1 - len2, 0)))
+
+        max_length = max(len(line) for line in a + b)
+
+        for i in range(len(a)):
+            a[i] += ''.join(' ' for _ in range(max_length - len(a[i])))
+
+        for i in range(len(b)):
+            b[i] += ''.join(' ' for _ in range(max_length - len(b[i])))
+
+        len1 = len(a)
+        len2 = len(b)
+
+        print(a)
+        print(b)
+        print(max_length)
+
         dp = [[0 for i in range(len1 + 1)] for j in range(len2 + 1)]
         # when len1 = 0 (meaning all lines had been deleted)
         if len1 == 0:
@@ -303,12 +324,18 @@ class GitRepository:
                 if a[i-1] == b[j-1]:
                     dp[i][j] = dp[i-1][j-1]
                 else:
+                    print(i, j, type(dp), type(dp[i]))
+
                     dp[i][j] = 1 + min(
                         dp[i - 1][j],  # Insertion
                         dp[i][j - 1],  # Deletion
                         dp[i - 1][j - 1]  # Replacement
                     )
 
+        print(dp)
+        print(len1, len2)
+        print(a)
+        print(b)
         return dp[len1][len2]
 
     @staticmethod
@@ -360,10 +387,3 @@ class GitRepository:
         file_1.close()
         file_2.close()
 
-
-def main():
-    num_diff = GitRepository.diff("text.txt", "text2.txt")
-    print(num_diff)
-
-if __name__ == "__main__":
-    main()
