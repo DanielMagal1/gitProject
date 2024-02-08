@@ -7,9 +7,9 @@ import pathlib
 import hashlib
 import datetime
 from colorama import Fore
+from eyal import Eyal
 
-
-class GitRepository:
+class GitRepository(Eyal):
     """A git repository"""
 
     def __init__(self, path, force=False):
@@ -24,14 +24,16 @@ class GitRepository:
         self.indexFilePath = os.path.join(self.gitdir, "index.json")
         self.workingDirectoryFiles = set()
         self.modifiedFiles = set()
-        self.trackedFiles = set()
         self.treeOfCommits = {}
         self.trackingArea = {}
         self.index = {}
         self.commitHead = None
         self.RemoteRepo = "/Users/daniel/Downloads/Remote"
 
+        super().__init__()
+        print(self.trackedFiles)
     # writing from data structures into the files in .git folder
+
 
     def writeToTxt_tf(self):
         tracked_txt = open('./.git/trackedFile.txt', 'w')
