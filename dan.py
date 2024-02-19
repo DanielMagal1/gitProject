@@ -7,9 +7,8 @@ import pathlib
 import hashlib
 import datetime
 from colorama import Fore
-from eyal import Eyal
 
-class GitRepository(Eyal):
+class GitRepository():
     """A git repository"""
 
     def __init__(self, path, force=False):
@@ -26,12 +25,11 @@ class GitRepository(Eyal):
         self.modifiedFiles = set()
         self.treeOfCommits = {}
         self.trackingArea = {}
+        self.trackedFiles = set()
         self.index = {}
         self.commitHead = None
         self.RemoteRepo = "/Users/daniel/Downloads/Remote"
 
-        super().__init__()
-        print(self.trackedFiles)
     # writing from data structures into the files in .git folder
 
 
@@ -284,7 +282,6 @@ class GitRepository(Eyal):
     # git_DIFF
     @staticmethod
     def diff(f1, f2):
-        print(f1)
         with open(f1, 'r') as f:  # closing the file after opening
             a = f.readlines()
         with open(f2, 'r') as f:  # closing the file after opening
@@ -307,9 +304,6 @@ class GitRepository(Eyal):
         len1 = len(a)
         len2 = len(b)
 
-        print(a)
-        print(b)
-        print(max_length)
 
         dp = [[0 for i in range(len1 + 1)] for j in range(len2 + 1)]
         # when len1 = 0 (meaning all lines had been deleted)
@@ -334,10 +328,6 @@ class GitRepository(Eyal):
                         dp[i - 1][j - 1]  # Replacement
                     )
 
-        print(dp)
-        print(len1, len2)
-        print(a)
-        print(b)
         return dp[len1][len2]
 
     @staticmethod
