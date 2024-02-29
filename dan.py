@@ -7,7 +7,8 @@ import pathlib
 import hashlib
 import datetime
 from colorama import Fore
-
+import sqlite3
+import OpenSSL
 class GitRepository():
     """A git repository"""
 
