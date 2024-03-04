@@ -6,7 +6,7 @@ import nacl.secret
 import nacl.utils
 from sqlalchemy.testing.pickleable import Address, User
 
-
+# doesnt work needs to be fixed
 def main():
     engine = create_engine("sqlite://", echo=True)
     with Session(engine) as session:
