@@ -7,8 +7,10 @@ import nacl.utils
 from sqlalchemy.testing.pickleable import Address, User
 
 # doesnt work needs to be fixed
+
+
 def main():
-    engine = create_engine("sqlite://", echo=True)
+    engine = create_engine("sqlite:///:memory", echo=True)
     with Session(engine) as session:
         exmpl = User(
             name = "user",
@@ -17,5 +19,7 @@ def main():
         )
         session.add(exmpl)
         session.commit()
+
+
 if __name__ == "__main__":
     main()

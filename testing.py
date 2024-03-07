@@ -1,23 +1,23 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text, Table, Integer, Column, String, MetaData
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from sqlalchemy.testing.pickleable import User, Address
 
 
 def main():
-    engine = create_engine("sqlite://", echo = True)
-    with Session(engine) as session:
-        spongebob = User(
-            name="spongebob",
-            fullname="Spongebob Squarepants",
-            addresses=[Address(email_address="spongebob@sqlalchemy.org")],
-        )
-        # patrick = User(name="patrick", fullname="Patrick Star")
-        session.add(spongebob)
-        stm = select(User).where(User.name == "spongebob")
-        spongebob = session.scalar(stm).one()
-        spongebob.addresses.appened(Address(email_address = "spongebob@gmail.com"))
-        session.commit()
+    engine = create_engine("sqlite", echo= True)
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT x, y  FROM some_table WHERE y > :y",{"y":2}))
+        for row in result:
+            print(f"x: {row.x}  y:{row.y}")
+    metadata_obj = MetaData()
+    user_table = Table(
+        "user account",
+        metadata_obj,
+        Column("id", Integer, primary_key=True),
+        Column("name", String(30)),
+        Column("fullname", String),
+    )
 
 
 if __name__ == "__main___":

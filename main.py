@@ -4,7 +4,7 @@ def main():
     """
     testing the diff fuction (currently does not work)
     """
-    num_diff = D.GitRepository.diff("text.txt", "text2.txt")
+    num_diff = D.GitRepository.diff("text1.txt", "text2.txt")
     print(num_diff)
 
 

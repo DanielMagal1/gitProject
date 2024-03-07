@@ -8,11 +8,10 @@ import hashlib
 import datetime
 from colorama import Fore
 import sqlite3
-import OpenSSL
 class GitRepository():
     """A git repository"""
 
-    def __init__(self, path, force=False):
+    def __init__(self, path):
         self.gitdir = os.path.join(path, ".git")
         self.logfile = os.path.join(self.gitdir, "log.txt")
         self.gitRepoPath = os.path.join(self.gitdir, "Repository")
@@ -283,9 +282,9 @@ class GitRepository():
     # git_DIFF
     @staticmethod
     def diff(f1, f2):
-        with open(f1, 'r') as f:  # closing the file after opening
+        with open(f1, 'r') as f:  # closing the file after opening and reading all lines
             a = f.readlines()
-        with open(f2, 'r') as f:  # closing the file after opening
+        with open(f2, 'r') as f:  # closing the file after opening and reading all lines
             b = f.readlines()
 
         len1 = len(a)  # the length of file 1
