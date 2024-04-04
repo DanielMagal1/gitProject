@@ -281,7 +281,7 @@ class GitRepository():
 
     # git_DIFF
     @staticmethod
-    def diff(f1, f2):
+    def diff(f1: str, f2: str) -> int:
         with open(f1, 'r') as f:  # closing the file after opening and reading all lines
             a = f.readlines()
         with open(f2, 'r') as f:  # closing the file after opening and reading all lines
@@ -320,7 +320,7 @@ class GitRepository():
                 if a[i-1] == b[j-1]:
                     dp[i][j] = dp[i-1][j-1]
                 else:
-                    print(i, j, type(dp), type(dp[i]))
+                    print(f"{Fore.GREEN}{i}{Fore.WHITE}, {Fore.RED}{j}{Fore.WHITE}")
 
                     dp[i][j] = 1 + min(
                         dp[i - 1][j],  # Insertion
