@@ -1,3 +1,5 @@
+#!
+
 import os
 import sys
 import time
@@ -7,7 +9,6 @@ import pathlib
 import hashlib
 import datetime
 from colorama import Fore
-import sqlite3
 class GitRepository():
     """A git repository"""
 
@@ -382,45 +383,7 @@ class GitRepository():
 
 
 
-        def diff(self, c1, c2):
-        c1_files = self.index[c1]
-        c2_files = self.index[c2]
 
-        addedFiles = set()
-        deletedFiles = set()
-
-        a = 0
-
-        for file in c1_files:
-            if file in c2_files and c2_files[file] != c1_files[file]:
-                if a == 0:
-                    print("\nModified files : \n ")
-                    a += 1
-                print(">>> ", Fore.BLUE, str(file), " :\n", Fore.WHITE)
-                ex = self.getExtension(file)
-                f1 = './.git/Repository/'+c1_files[file]+ex
-                f2 = './.git/Repository/'+c2_files[file]+ex
-                self.printDifference(f1, f2)
-            elif file not in c2_files:
-                addedFiles.add(file)
-
-        if len(addedFiles) != 0:
-            counter = 1
-            print("\nAdded Files : \n")
-        for f in addedFiles:
-            print(counter, ". ", Fore.GREEN, f, Fore.WHITE, sep="")
-            counter += 1
-
-        for file in c2_files:
-            if file not in c1_files:
-                deletedFiles.add(file)
-
-        if len(deletedFiles) != 0:
-            counter = 1
-            print("\nDeleted Files : \n")
-        for f in deletedFiles:
-            print(counter, ". ", Fore.RED, f, Fore.WHITE, sep="")
-            counter += 1
 
     # git_LOG
 
@@ -804,13 +767,13 @@ def main():
         Gitobj.readFromTxt_tf()
         Gitobj.readFromJson_ta()
         Gitobj.readFromJson_toc()
-        Gitobj.raedFromJson_index()
+        Gitobj.readFromJson_index()
 
     command = sys.argv
-
-    if len(command) > 0:
+    if len(command) > 1:
         if command[1] == 'init':
-            Gitobj.ExecInit(command)
+
+            Gitobj.execInit(command)
             print("\n<<-- Git Directory has been initialised -->>\n")
 
         elif command[1] == 'add':
@@ -831,7 +794,7 @@ def main():
         elif command[1] == 'commit':
             check_git(Gitobj)
             message = input("Type some commit message : ")
-            Gitobj.ExecCommit(message)
+            Gitobj.execCommit(message)
             print("\n<<-- Changes have been committed -->>\n")
 
         elif command[1] == 'diff':
@@ -868,6 +831,10 @@ def main():
             check_git(Gitobj)
             Gitobj.pull()
             print("\n<<-- Pulled from Remote Repository -->>\n")
+
+        elif command[1] == 'help':
+            print("\nAvailable commands:"
+                  "init, add, status, commit, diff, log, rollback, checkout, push, pull, help")
 
         else:
             print("Wrong Command. Try Again.\n\n")
