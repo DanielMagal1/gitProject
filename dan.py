@@ -11,7 +11,7 @@ import datetime
 from colorama import Fore
 class GitRepository():
     """A git repository"""
-
+    # checking
     def __init__(self, path):
         self.gitdir = os.path.join(path, ".git")
         self.logfile = os.path.join(self.gitdir, "log.txt")
