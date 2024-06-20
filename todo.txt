@@ -1,0 +1,5 @@
+1. check the diff function
+2 client server serve as hub(take from 2.6/2.7 good exmpl for protocol and make it multi user with processing)
+3 push/pull/clone from client
+4 multi user sync in actions of the above
+5 help
