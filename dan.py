@@ -759,7 +759,6 @@ def check_git(a):
 
 
 def main():
-
     Gitobj = GitRepository(os.getcwd())
 
     if os.path.exists(Gitobj.gitdir):
@@ -835,9 +834,9 @@ def main():
         elif command[1] == 'help':
             print("\nAvailable commands:"
                   "init, add, status, commit, diff, log, rollback, checkout, push, pull, help")
-
         else:
-            print("Wrong Command. Try Again.\n\n")
+            print("Wrong Command. Try Again(Type help for available commands).\n\n")
+            print("\nrun the following in terminal: python dan.py (command) (file if necessary)\n")
             sys.exit(0)
 
     else:
